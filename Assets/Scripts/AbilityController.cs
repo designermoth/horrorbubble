@@ -7,7 +7,6 @@ using System.Numerics;
 
 public class AbilityController : MonoBehaviour
 {
-
     [SerializeField] Slider slider;
     [SerializeField] Light pointLight;
 
@@ -17,6 +16,7 @@ public class AbilityController : MonoBehaviour
     float maxLightIntensity;
 
     float currentDuration;
+    // ANDRE USE THIS
     bool abilityInUse = false;
     bool onCooldown = false;
 
@@ -36,7 +36,7 @@ public class AbilityController : MonoBehaviour
             abilityInUse = false;
             onCooldown = true;
             StartCoroutine(Cooldown());
-            pointLight.DOIntensity(maxLightIntensity, 0.5f);
+            pointLight.DOIntensity(maxLightIntensity, 1.5f).SetEase(Ease.InSine);
         }
         if (Input.GetKeyDown(KeyCode.Space) && !onCooldown)
         {
