@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy_NavMesh : MonoBehaviour
 {
-    [SerializeField] Vector3 target;
+    [SerializeField] GameObject target;
     [SerializeField] Vector3 targetLastPos;
 
     NavMeshAgent agent;
@@ -33,22 +33,24 @@ public class Enemy_NavMesh : MonoBehaviour
 
     bool wasIChasing = false;
     bool onSearchLastPos = false;
-
+    AbilityController abilityController;
+    bool playerAbilityOnUse = false;
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        target = GameObject.FindGameObjectWithTag("Player").transform.position;
+        abilityController = target.GetComponent<AbilityController>();
         layerMask = LayerMask.GetMask("Player", "Walls");
         audioPassFilter = GetComponentInChildren<AudioLowPassFilter>();
         spawn_pos = this.transform.position;
     }
     private void FixedUpdate()
     {
+        playerAbilityOnUse = abilityController.abilityInUse;
         frames++;
         RayCastToMuffleSound();
         UpdateTargetPosition();
         CheckIfImFacingPlayer();
-        if (IsPlayerInRange()) //&& ability is not used)
+        if (IsPlayerInRange() && !playerAbilityOnUse) //&& ability is not used)
         {
             Chase();
 
@@ -75,12 +77,12 @@ public class Enemy_NavMesh : MonoBehaviour
     }
     private void UpdateTargetPosition()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform.position;
+        target = GameObject.FindGameObjectWithTag("Player");
     }
     private bool CheckIfImFacingPlayer()
     {
         forward = transform.TransformDirection(Vector3.forward);
-        toPlayer = Vector3.Normalize(target - transform.position);
+        toPlayer = Vector3.Normalize(target.transform.position - transform.position);
         print(Vector3.Dot(forward, toPlayer));
         if (Vector3.Dot(forward, toPlayer) < 0.70f)
         {
@@ -99,7 +101,7 @@ public class Enemy_NavMesh : MonoBehaviour
     {
         wasIChasing = true;
         print("CHASE MODE - " + currDetectionRadius + " - ");
-        agent.SetDestination(target);
+        agent.SetDestination(target.transform.position);
         RaycastHit hit;
         if (Physics.Raycast(transform.position, (raycastDirection - transform.position), out hit, Mathf.Infinity, layerMask))
         {
@@ -107,7 +109,7 @@ public class Enemy_NavMesh : MonoBehaviour
 
 
         }
-        targetLastPos = target;
+        targetLastPos = target.transform.position;
     }
     IEnumerator PatrolLastPosDuration(float duration)
     {
@@ -132,7 +134,7 @@ public class Enemy_NavMesh : MonoBehaviour
     private bool IsPlayerInRange()
     {
         //Debug.Log(Vector2.Distance(this.transform.position, target));
-        if (Vector2.Distance(this.transform.position, target) <= currDetectionRadius)
+        if (Vector2.Distance(this.transform.position, target.transform.position) <= currDetectionRadius)
         {
             return true;
         }
@@ -146,7 +148,7 @@ public class Enemy_NavMesh : MonoBehaviour
             RaycastHit hit;
             // Does the ray intersect any objects excluding the player layer
 
-            if (Physics.Raycast(transform.position, (target - transform.position), out hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(transform.position, (target.transform.position - transform.position), out hit, Mathf.Infinity, layerMask))
             {
                 if (hit.transform.gameObject.CompareTag("Player"))
                 {
@@ -159,11 +161,11 @@ public class Enemy_NavMesh : MonoBehaviour
                     audioPassFilter.enabled = true;
 
                 }
-                Debug.DrawRay(transform.position, (target - transform.position) * hit.distance, Color.yellow);
+                Debug.DrawRay(transform.position, (target.transform.position - transform.position) * hit.distance, Color.yellow);
             }
             else
             {
-                Debug.DrawRay(transform.position, (target - transform.position) * 1000, Color.white);
+                Debug.DrawRay(transform.position, (target.transform.position - transform.position) * 1000, Color.white);
                 Debug.Log("Did not Hit");
 
             }

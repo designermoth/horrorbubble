@@ -20,7 +20,8 @@ public class AbilityController : MonoBehaviour
     float maxLightIntensity;
 
     float currentDuration;
-    bool abilityInUse = false;
+
+    public bool abilityInUse = false;
     bool onCooldown = false;
 
 
@@ -89,12 +90,12 @@ public class AbilityController : MonoBehaviour
     {
         yield return new WaitForSeconds(cooldown);
         onCooldown = false;
-    } 
+    }
 
     void AbilityInUse()
     {
         currentDuration -= Time.deltaTime;
-        
+
         //DO SMTH
     }
 }

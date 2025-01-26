@@ -23,9 +23,6 @@ public class PlayerController : MonoBehaviour
     public bool canMove = true;
 
     CharacterController characterController;
-
-    //testing
-    public Transform enemy;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
