@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 4396739780859395191}
   - component: {fileID: 2047097524031520989}
   - component: {fileID: 4268515004800863388}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: chao templo final
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4396739780859395191
 Transform:
