@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -62,5 +63,16 @@ public class PlayerController : MonoBehaviour
 
         }
         #endregion
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            SceneManager.LoadScene(3);
+        }
+        if (collision.gameObject.CompareTag("Win"))
+        {
+            SceneManager.LoadScene(2);
+        }
     }
 }

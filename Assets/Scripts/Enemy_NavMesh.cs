@@ -18,6 +18,7 @@ public class Enemy_NavMesh : MonoBehaviour
     [SerializeField] private float SearchLastPosDuration = 5f;
     Vector2 spawn_pos;
     private int frames = 0; //exclusive for patrolling every x frames
+    Collider thisCollider;
 
     // Raycasting and detecting player
     private Vector3 pos1, pos2, pos3;
@@ -37,15 +38,23 @@ public class Enemy_NavMesh : MonoBehaviour
     bool playerAbilityOnUse = false;
     private void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
         abilityController = target.GetComponent<AbilityController>();
         layerMask = LayerMask.GetMask("Player", "Walls");
         audioPassFilter = GetComponentInChildren<AudioLowPassFilter>();
         spawn_pos = this.transform.position;
+        //thisCollider = GetComponent<Collider>();
     }
     private void FixedUpdate()
     {
         playerAbilityOnUse = abilityController.abilityInUse;
+        //if (playerAbilityOnUse)
+        //{
+        //    thisCollider.isTrigger = true;
+        //}
+        //else
+        //    thisCollider.isTrigger = false;
         frames++;
         RayCastToMuffleSound();
         UpdateTargetPosition();
