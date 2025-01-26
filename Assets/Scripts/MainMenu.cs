@@ -17,4 +17,8 @@ public class MainMenu : MonoBehaviour
         audioSource.Play();
         Application.Quit();
     }
+    public void OnMainMenuButton()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
